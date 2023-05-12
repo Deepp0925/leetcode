@@ -1,6 +1,8 @@
 mod num1;
 mod num2;
 mod num3;
+mod num4;
+mod num5;
 
 pub fn find_length_of_shortest_subarray(arr: Vec<i32>) -> i32 {
     let len = arr.len();
