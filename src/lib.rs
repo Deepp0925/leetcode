@@ -1,8 +1,21 @@
+/// Two sum complementry problem
 mod num1;
+/// Revese Node Linked List
 mod num2;
+/// Longest Substring Without Repeating Characters
 mod num3;
+/// Median of Two Sorted Arrays
 mod num4;
+/// Longest Palindromic Substring
 mod num5;
+/// ZigZag Conversion
+mod num6;
+/// Reverse Integer
+mod num7;
+/// String to Integer (atoi)
+mod num8;
+/// Palindrome Number
+mod num9;
 
 pub fn find_length_of_shortest_subarray(arr: Vec<i32>) -> i32 {
     let len = arr.len();
