@@ -17,6 +17,15 @@ mod num8;
 /// Palindrome Number
 mod num9;
 
+/// Regular Expression Matching
+mod num10;
+/// Container With Most Water
+mod num11;
+/// Integer to Roman
+mod num12;
+/// Roman to Integer
+mod num13;
+
 pub fn find_length_of_shortest_subarray(arr: Vec<i32>) -> i32 {
     let len = arr.len();
     let mut bool_arr = Vec::with_capacity(len);
