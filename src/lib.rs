@@ -25,6 +25,10 @@ mod num11;
 mod num12;
 /// Roman to Integer
 mod num13;
+/// Longest Common Prefix
+mod num14;
+/// 3Sum
+mod num15;
 
 pub fn find_length_of_shortest_subarray(arr: Vec<i32>) -> i32 {
     let len = arr.len();

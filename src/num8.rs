@@ -37,9 +37,9 @@ pub fn my_atoi(s: String) -> i32 {
                 return i32::MAX;
             }
             if err.kind() == &std::num::IntErrorKind::NegOverflow {
-                return i32::MIN;
+                i32::MIN
             } else {
-                return 0;
+                0
             }
         }
     }
