@@ -1,41 +1,34 @@
 pub fn longest_palindrome(s: String) -> String {
     let len = s.len();
-    if len < 2 {
+    if len == 1 {
         return s;
     }
 
-    let mut dp = vec![vec![false; len]; len];
-    let mut start = 0;
-    let mut max_len = 1;
-
-    // Single characters are palindromes
+    let mut longest = String::new();
     for i in 0..len {
-        dp[i][i] = true;
-    }
+        let mut left = i;
+        let mut right = i;
 
-    // Check for palindromes of length 2
-    for i in 0..len - 1 {
-        let j = i + 1;
-        if s.chars().nth(i) == s.chars().nth(j) {
-            dp[i][j] = true;
-            start = i;
-            max_len = 2;
+        while left > 0 && s.chars().nth(left - 1) == s.chars().nth(i) {
+            left -= 1;
+        }
+
+        while right < len - 1 && s.chars().nth(right + 1) == s.chars().nth(i) {
+            right += 1;
+        }
+
+        while left > 0 && right < len - 1 && s.chars().nth(left - 1) == s.chars().nth(right + 1) {
+            left -= 1;
+            right += 1;
+        }
+
+        let curr = &s[left..=right];
+        if curr.len() > longest.len() {
+            longest = curr.to_string();
         }
     }
 
-    // Check for palindromes of length > 2
-    for k in 3..=len {
-        for i in 0..len - k + 1 {
-            let j = i + k - 1;
-            if dp[i + 1][j - 1] && s.chars().nth(i) == s.chars().nth(j) {
-                dp[i][j] = true;
-                start = i;
-                max_len = k;
-            }
-        }
-    }
-
-    (&s[start..start + max_len]).to_string()
+    longest
 }
 
 #[cfg(test)]

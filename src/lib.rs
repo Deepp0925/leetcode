@@ -29,6 +29,12 @@ mod num13;
 mod num14;
 /// 3Sum
 mod num15;
+/// 3Sum Closest
+mod num16;
+/// Letter Combinations of a Phone Number
+mod num17;
+/// 4Sum
+mod num18;
 
 pub fn find_length_of_shortest_subarray(arr: Vec<i32>) -> i32 {
     let len = arr.len();
