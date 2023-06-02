@@ -35,6 +35,10 @@ mod num16;
 mod num17;
 /// 4Sum
 mod num18;
+/// Remove Nth Node From End of List
+mod num19;
+/// Valid Parentheses
+mod num20;
 
 pub fn find_length_of_shortest_subarray(arr: Vec<i32>) -> i32 {
     let len = arr.len();
