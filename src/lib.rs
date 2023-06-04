@@ -39,6 +39,10 @@ mod num18;
 mod num19;
 /// Valid Parentheses
 mod num20;
+/// Merge Two Sorted Lists
+mod num21;
+/// Generate Parentheses
+mod num22;
 
 pub fn find_length_of_shortest_subarray(arr: Vec<i32>) -> i32 {
     let len = arr.len();
