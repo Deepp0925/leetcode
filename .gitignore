@@ -2,3 +2,4 @@
 *.lock
 *.js
 *.json
+.DS_Store

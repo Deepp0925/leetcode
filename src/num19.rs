@@ -41,64 +41,59 @@ pub fn remove_nth_from_end(mut head: Option<Box<ListNode>>, n: i32) -> Option<Bo
     head
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_remove_nth_from_end() {
-        assert_eq!(
-            remove_nth_from_end(
-                Some(Box::new(ListNode {
-                    val: 1,
-                    next: Some(Box::new(ListNode {
-                        val: 2,
-                        next: Some(Box::new(ListNode {
-                            val: 3,
-                            next: Some(Box::new(ListNode {
-                                val: 4,
-                                next: Some(Box::new(ListNode { val: 5, next: None })),
-                            })),
-                        })),
-                    })),
-                })),
-                2
-            ),
+#[test]
+fn test_remove_nth_from_end() {
+    assert_eq!(
+        remove_nth_from_end(
             Some(Box::new(ListNode {
                 val: 1,
                 next: Some(Box::new(ListNode {
                     val: 2,
                     next: Some(Box::new(ListNode {
                         val: 3,
-                        next: Some(Box::new(ListNode { val: 5, next: None })),
+                        next: Some(Box::new(ListNode {
+                            val: 4,
+                            next: Some(Box::new(ListNode { val: 5, next: None })),
+                        })),
                     })),
                 })),
-            }))
-        );
-        assert_eq!(
-            remove_nth_from_end(
-                Some(Box::new(ListNode {
-                    val: 1,
-                    next: Some(Box::new(ListNode { val: 2, next: None })),
+            })),
+            2
+        ),
+        Some(Box::new(ListNode {
+            val: 1,
+            next: Some(Box::new(ListNode {
+                val: 2,
+                next: Some(Box::new(ListNode {
+                    val: 3,
+                    next: Some(Box::new(ListNode { val: 5, next: None })),
                 })),
-                1
-            ),
-            Some(Box::new(ListNode { val: 1, next: None }))
-        );
-        assert_eq!(
-            remove_nth_from_end(
-                Some(Box::new(ListNode {
-                    val: 1,
-                    next: Some(Box::new(ListNode { val: 2, next: None })),
-                })),
-                2
-            ),
-            Some(Box::new(ListNode { val: 2, next: None }))
-        );
-        assert_eq!(
-            remove_nth_from_end(Some(Box::new(ListNode { val: 1, next: None })), 1),
-            None
-        );
-        assert_eq!(remove_nth_from_end(None, 1), None);
-    }
+            })),
+        }))
+    );
+    assert_eq!(
+        remove_nth_from_end(
+            Some(Box::new(ListNode {
+                val: 1,
+                next: Some(Box::new(ListNode { val: 2, next: None })),
+            })),
+            1
+        ),
+        Some(Box::new(ListNode { val: 1, next: None }))
+    );
+    assert_eq!(
+        remove_nth_from_end(
+            Some(Box::new(ListNode {
+                val: 1,
+                next: Some(Box::new(ListNode { val: 2, next: None })),
+            })),
+            2
+        ),
+        Some(Box::new(ListNode { val: 2, next: None }))
+    );
+    assert_eq!(
+        remove_nth_from_end(Some(Box::new(ListNode { val: 1, next: None })), 1),
+        None
+    );
+    assert_eq!(remove_nth_from_end(None, 1), None);
 }
