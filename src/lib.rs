@@ -47,3 +47,15 @@ mod num22;
 mod num23;
 /// Swapped nodes
 mod num24;
+/// Reverse Nodes in k-Group
+mod num25;
+/// Remove Duplicates from Sorted Array
+mod num26;
+/// Remove Element
+mod num27;
+/// Find the index of the first occurence in a string
+mod num28;
+/// Divide Two Integer
+mod num29;
+/// Substring with Concatenation of All Words
+mod num30;
