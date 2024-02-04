@@ -8,9 +8,9 @@ pub fn length_of_longest_substring(s: String) -> i32 {
         return 0;
     }
 
-    let mut chars = chars.iter();
+    let chars = chars.iter();
 
-    while let Some(char) = chars.next() {
+    for char in chars {
         let contains = set.contains(char);
 
         if contains {
