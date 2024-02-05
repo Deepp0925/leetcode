@@ -1,41 +1,45 @@
 mod solutions_1_30;
 
-pub fn search(nums: Vec<i32>, target: i32) -> i32 {
-    let mut index = -1;
-    let mut left = 0;
-    let mut right = nums.len() - 1;
+pub fn search_range(nums: Vec<i32>, target: i32) -> Vec<i32> {
+    if nums.is_empty() {
+        return vec![-1, -1];
+    }
 
-    while right >= left {
-        let mid = (right + left) / 2;
+    let index = nums.binary_search(&target);
 
-        if nums[mid] == target {
-            index = mid as i32;
+    if index.is_err() {
+        return vec![-1, -1];
+    }
+
+    let index = index.unwrap() as i32;
+
+    let mut leftmost = index;
+    let mut rightmost = index;
+    let mut left = index - 1;
+    let mut right = index + 1;
+
+    loop {
+        if left >= 0 && nums[left as usize] == target {
+            leftmost = left;
+        }
+
+        if right < nums.len() as i32 && nums[right as usize] == target {
+            rightmost = right;
+        }
+
+        if rightmost != right && leftmost != left {
             break;
         }
 
-        // number is between increasing order
-        if nums[left] <= nums[mid] {
-            if target >= nums[left] && target < nums[mid] {
-                right = mid - 1;
-            } else {
-                left = mid + 1;
-            }
-        } else if target <= nums[right] && target > nums[mid] {
-            left = mid + 1;
-        } else {
-            right = mid - 1;
-        }
+        left -= 1;
+        right += 1;
     }
 
-    index
+    vec![leftmost, rightmost]
 }
 
 #[test]
 fn test_fn() {
-    assert_eq!(search(vec![5, 6, 7, 8, 0, 1, 2, 4], 0), 4);
-    assert_eq!(search(vec![5, 6, 7, 0, 1, 2, 3, 4], 7), 2);
-    assert_eq!(search(vec![1], 0), -1);
-    assert_eq!(search(vec![3, 5, 1], 0), -1);
-    assert_eq!(search(vec![5, 1, 3], 2), -1);
-    assert_eq!(search(vec![7, 8, 1, 2, 3, 4, 5, 6], 2), 3);
+    assert_eq!(search_range(vec![5, 7, 7, 8, 8, 10], 8), [3, 4]);
+    assert_eq!(search_range(vec![2, 2], 2), [0, 1]);
 }
