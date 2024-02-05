@@ -1,29 +1,28 @@
 pub fn divide(dividend: i32, divisor: i32) -> i32 {
-    if dividend == i32::MIN && divisor == -1 {
+    if divisor == 1 {
+        return i32::min(i32::max(dividend, i32::MIN), i32::MAX);
+    } else if divisor == -1 && dividend == i32::MIN {
         return i32::MAX;
     }
 
-    let is_negative = dividend.is_negative() ^ divisor.is_negative();
+    let subtracting = dividend.is_negative() ^ divisor.is_negative();
 
-    let mut num = dividend as i64;
-    let den = divisor as i64;
-
+    let mut num = (dividend as i64).abs();
+    let den = (divisor as i64).abs();
     let mut result = 0;
-
     while num >= den {
-        let mut den_copy = den;
+        let mut temp_den = den;
         let mut multiple = 1;
-
-        while num >= den_copy << 1 {
-            den_copy <<= 1; // << is multiply by 2
+        while num >= temp_den << 1 {
+            temp_den <<= 1;
             multiple <<= 1;
         }
 
-        num -= den_copy; //ex 15 - 12
-        result += multiple; //ex 4, then 1
+        num -= temp_den;
+        result += multiple;
     }
 
-    if is_negative {
+    if subtracting {
         format!("-{result}").parse().unwrap()
     } else {
         result
@@ -31,15 +30,7 @@ pub fn divide(dividend: i32, divisor: i32) -> i32 {
 }
 
 #[test]
-fn test_divide() {
-    // println!("{:?}", "-23".parse::<i32>().unwrap());
-    // println!("{}", -2147483648_i32.saturating_div(-1))
-    println!("{}", 3 << 1)
-    // assert_eq!(divide(10, 3), 3);
-    // assert_eq!(divide(7, -3), -2);
-    // assert_eq!(divide(1, 1), 1);
-    // assert_eq!(divide(-2147483648, -1), 2147483647);
-    // assert_eq!(divide(-2147483648, 1), -2147483648);
-    // assert_eq!(divide(2147483647, 2), 1073741823);
-    // assert_eq!(divide(-2147483648, 2), -1073741824)
+fn test_fn() {
+    assert_eq!(divide(10, 3), 3);
+    assert_eq!(divide(7, -3), -2);
 }
