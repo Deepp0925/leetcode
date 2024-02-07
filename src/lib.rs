@@ -1,45 +1,17 @@
 mod solutions_1_30;
 
-pub fn search_range(nums: Vec<i32>, target: i32) -> Vec<i32> {
-    if nums.is_empty() {
-        return vec![-1, -1];
-    }
+pub fn search_insert(nums: Vec<i32>, target: i32) -> i32 {
+    let mut res = 0;
+    let _ = nums
+        .binary_search(&target)
+        .map(|pos| res = pos as i32)
+        .map_err(|exp_pos| res = exp_pos as i32);
 
-    let index = nums.binary_search(&target);
-
-    if index.is_err() {
-        return vec![-1, -1];
-    }
-
-    let index = index.unwrap() as i32;
-
-    let mut leftmost = index;
-    let mut rightmost = index;
-    let mut left = index - 1;
-    let mut right = index + 1;
-
-    loop {
-        if left >= 0 && nums[left as usize] == target {
-            leftmost = left;
-        }
-
-        if right < nums.len() as i32 && nums[right as usize] == target {
-            rightmost = right;
-        }
-
-        if rightmost != right && leftmost != left {
-            break;
-        }
-
-        left -= 1;
-        right += 1;
-    }
-
-    vec![leftmost, rightmost]
+    res
 }
 
 #[test]
 fn test_fn() {
-    assert_eq!(search_range(vec![5, 7, 7, 8, 8, 10], 8), [3, 4]);
-    assert_eq!(search_range(vec![2, 2], 2), [0, 1]);
+    assert_eq!(search_insert(vec![1, 3, 5, 6], 5), 2);
+    assert_eq!(search_insert(vec![1, 3, 5, 6], 2), 1);
 }
