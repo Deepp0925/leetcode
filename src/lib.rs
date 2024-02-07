@@ -1,13 +1,10 @@
 mod solutions_1_30;
 
 pub fn search_insert(nums: Vec<i32>, target: i32) -> i32 {
-    let mut res = 0;
-    let _ = nums
-        .binary_search(&target)
-        .map(|pos| res = pos as i32)
-        .map_err(|exp_pos| res = exp_pos as i32);
-
-    res
+    match nums.binary_search(&target) {
+        Ok(pos) => pos as i32,
+        Err(pos) => pos as i32,
+    }
 }
 
 #[test]
