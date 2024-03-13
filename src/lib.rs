@@ -22,22 +22,19 @@ impl TreeNode {
 use std::cell::RefCell;
 use std::rc::Rc;
 impl Solution {
-    pub fn min_depth(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
-        if root.is_none() {
-            return 0;
-        }
+    pub fn has_path_sum(root: Option<Rc<RefCell<TreeNode>>>, target_sum: i32) -> bool {
+        match root {
+            Some(tree) => {
+                // check if it is a leaf
+                let tree = tree.borrow();
+                if tree.left.is_none() && tree.right.is_none() {
+                    return target_sum - tree.val == 0;
+                }
 
-        let root = root.as_ref().unwrap().borrow();
-
-        let (lh, rh) = (
-            Self::min_depth(root.left.clone()),
-            Self::min_depth(root.right.clone()),
-        );
-
-        if lh == 0 || rh == 0 {
-            1 + rh + lh
-        } else {
-            1 + rh.min(lh)
+                Self::has_path_sum(tree.left.clone(), target_sum - tree.val)
+                    || Self::has_path_sum(tree.right.clone(), target_sum - tree.val)
+            }
+            None => false,
         }
     }
 }
