@@ -22,16 +22,24 @@ impl TreeNode {
 use std::cell::RefCell;
 use std::rc::Rc;
 impl Solution {
-    pub fn max_depth(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
-        if root.is_none() {
-            return 0;
+    pub fn is_balanced(root: Option<Rc<RefCell<TreeNode>>>) -> bool {
+        fn height(root: &Option<Rc<RefCell<TreeNode>>>) -> Option<usize> {
+            let Some(root) = root else { return Some(0) };
+            let r = root.borrow();
+
+            let lheight = height(&r.left)?;
+            let rheight = height(&r.right)?;
+
+            if lheight == rheight + 1 || lheight == rheight {
+                Some(lheight + 1)
+            } else if lheight + 1 == rheight {
+                Some(rheight + 1)
+            } else {
+                None
+            }
         }
 
-        let root = root.as_ref().unwrap().borrow();
-        std::cmp::max(
-            Self::max_depth(root.left.clone()),
-            Self::max_depth(root.right.clone()),
-        ) + 1 // for current
+        height(&root).is_some()
     }
 }
 
