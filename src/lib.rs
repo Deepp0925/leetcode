@@ -22,33 +22,23 @@ impl TreeNode {
 use std::cell::RefCell;
 use std::rc::Rc;
 impl Solution {
-    pub fn is_valid_bst(root: Option<Rc<RefCell<TreeNode>>>) -> bool {
-        fn is_valid_bst(
-            node: &Option<Rc<RefCell<TreeNode>>>,
-            min: Option<i32>,
-            max: Option<i32>,
-        ) -> bool {
-            if node.is_none() {
-                return true;
-            }
-
-            let val = node.as_ref().unwrap().borrow().val;
-            if let Some(min) = min {
-                if val <= min {
-                    return false;
-                }
-            }
-            if let Some(max) = max {
-                if val >= max {
-                    return false;
-                }
-            }
-
-            is_valid_bst(&node.as_ref().unwrap().borrow().left, min, Some(val))
-                && is_valid_bst(&node.as_ref().unwrap().borrow().right, Some(val), max)
+    pub fn is_same_tree(
+        p: Option<Rc<RefCell<TreeNode>>>,
+        q: Option<Rc<RefCell<TreeNode>>>,
+    ) -> bool {
+        if p.is_none() && q.is_none() {
+            return true;
+        }
+        if p.is_none() || q.is_none() {
+            return false;
         }
 
-        is_valid_bst(&root, None, None)
+        let p = p.as_ref().unwrap().borrow();
+        let q = q.as_ref().unwrap().borrow();
+
+        p.val == q.val
+            && Self::is_same_tree(p.left.clone(), q.left.clone())
+            && Self::is_same_tree(p.right.clone(), q.right.clone())
     }
 }
 
