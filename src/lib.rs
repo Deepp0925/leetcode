@@ -22,20 +22,33 @@ impl TreeNode {
 use std::cell::RefCell;
 use std::rc::Rc;
 impl Solution {
-    pub fn has_path_sum(root: Option<Rc<RefCell<TreeNode>>>, target_sum: i32) -> bool {
-        match root {
-            Some(tree) => {
-                // check if it is a leaf
+    pub fn path_sum(root: Option<Rc<RefCell<TreeNode>>>, target_sum: i32) -> Vec<Vec<i32>> {
+        let mut paths = vec![];
+
+        fn dfs(
+            tree: Option<Rc<RefCell<TreeNode>>>,
+            curr_path: &mut Vec<i32>,
+            paths: &mut Vec<Vec<i32>>,
+            target_sum: i32,
+        ) {
+            if let Some(tree) = tree {
                 let tree = tree.borrow();
-                if tree.left.is_none() && tree.right.is_none() {
-                    return target_sum - tree.val == 0;
+                curr_path.push(tree.val);
+                // encountered a leaf
+                if tree.left.is_none() && tree.right.is_none() && target_sum - tree.val == 0 {
+                    paths.push(curr_path.clone())
                 }
 
-                Self::has_path_sum(tree.left.clone(), target_sum - tree.val)
-                    || Self::has_path_sum(tree.right.clone(), target_sum - tree.val)
+                dfs(tree.left.clone(), curr_path, paths, target_sum - tree.val);
+                dfs(tree.right.clone(), curr_path, paths, target_sum - tree.val);
+
+                curr_path.pop();
             }
-            None => false,
         }
+
+        dfs(root, &mut Vec::new(), &mut paths, target_sum);
+
+        paths
     }
 }
 
