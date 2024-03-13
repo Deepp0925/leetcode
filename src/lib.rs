@@ -22,23 +22,29 @@ impl TreeNode {
 use std::cell::RefCell;
 use std::rc::Rc;
 impl Solution {
-    pub fn is_same_tree(
-        p: Option<Rc<RefCell<TreeNode>>>,
-        q: Option<Rc<RefCell<TreeNode>>>,
-    ) -> bool {
-        if p.is_none() && q.is_none() {
+    pub fn is_symmetric(root: Option<Rc<RefCell<TreeNode>>>) -> bool {
+        if root.is_none() {
             return true;
         }
-        if p.is_none() || q.is_none() {
-            return false;
+
+        fn is_symmetric(
+            p: Option<Rc<RefCell<TreeNode>>>,
+            q: Option<Rc<RefCell<TreeNode>>>,
+        ) -> bool {
+            if p.is_none() || q.is_none() {
+                return p.is_none() && q.is_none();
+            }
+
+            let p = p.as_ref().unwrap().borrow();
+            let q = q.as_ref().unwrap().borrow();
+
+            p.val == q.val
+                && is_symmetric(p.left.clone(), q.right.clone())
+                && is_symmetric(p.right.clone(), q.left.clone())
         }
 
-        let p = p.as_ref().unwrap().borrow();
-        let q = q.as_ref().unwrap().borrow();
-
-        p.val == q.val
-            && Self::is_same_tree(p.left.clone(), q.left.clone())
-            && Self::is_same_tree(p.right.clone(), q.right.clone())
+        let rb = root.as_ref().unwrap().borrow();
+        is_symmetric(rb.left.clone(), rb.right.clone())
     }
 }
 
