@@ -22,29 +22,16 @@ impl TreeNode {
 use std::cell::RefCell;
 use std::rc::Rc;
 impl Solution {
-    pub fn is_symmetric(root: Option<Rc<RefCell<TreeNode>>>) -> bool {
+    pub fn max_depth(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
         if root.is_none() {
-            return true;
+            return 0;
         }
 
-        fn is_symmetric(
-            p: Option<Rc<RefCell<TreeNode>>>,
-            q: Option<Rc<RefCell<TreeNode>>>,
-        ) -> bool {
-            if p.is_none() || q.is_none() {
-                return p.is_none() && q.is_none();
-            }
-
-            let p = p.as_ref().unwrap().borrow();
-            let q = q.as_ref().unwrap().borrow();
-
-            p.val == q.val
-                && is_symmetric(p.left.clone(), q.right.clone())
-                && is_symmetric(p.right.clone(), q.left.clone())
-        }
-
-        let rb = root.as_ref().unwrap().borrow();
-        is_symmetric(rb.left.clone(), rb.right.clone())
+        let root = root.as_ref().unwrap().borrow();
+        std::cmp::max(
+            Self::max_depth(root.left.clone()),
+            Self::max_depth(root.right.clone()),
+        ) + 1 // for current
     }
 }
 
