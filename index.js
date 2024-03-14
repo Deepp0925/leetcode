@@ -1,10 +1,30 @@
 var connect = function (root) {
-  if (!root?.left) return root;
-  root.left.next = root.right;
-  root.right.next = root.next ? root.next.left : null;
+  if (!root) return root;
 
-  connect(root.left);
+  if (root.left) {
+    if (root.right) {
+      root.left.next = root.right;
+    } else {
+      let next = root.next;
+      while (next) {
+        root.left.next = next?.left || next?.right || null;
+        next = next.next;
+        if (root.left.next) break;
+      }
+    }
+  }
+
+  if (root.right) {
+    let next = root.next;
+    while (next) {
+      root.right.next = next?.left || next?.right || null;
+      next = next.next;
+      if (root.right.next) break;
+    }
+  }
+
   connect(root.right);
+  connect(root.left);
 
   return root;
 };
