@@ -21,34 +21,22 @@ impl TreeNode {
 
 use std::cell::RefCell;
 use std::rc::Rc;
+type OptNode = Option<Rc<RefCell<TreeNode>>>;
 impl Solution {
-    pub fn path_sum(root: Option<Rc<RefCell<TreeNode>>>, target_sum: i32) -> Vec<Vec<i32>> {
-        let mut paths = vec![];
-
-        fn dfs(
-            tree: Option<Rc<RefCell<TreeNode>>>,
-            curr_path: &mut Vec<i32>,
-            paths: &mut Vec<Vec<i32>>,
-            target_sum: i32,
-        ) {
-            if let Some(tree) = tree {
-                let tree = tree.borrow();
-                curr_path.push(tree.val);
-                // encountered a leaf
-                if tree.left.is_none() && tree.right.is_none() && target_sum - tree.val == 0 {
-                    paths.push(curr_path.clone())
+    pub fn flatten(root: &mut Option<Rc<RefCell<TreeNode>>>) {
+        fn flat(node: OptNode, after: OptNode) -> OptNode {
+            match &node {
+                None => return after,
+                Some(n) => {
+                    let mut b = n.borrow_mut();
+                    let right = flat(b.right.take(), after);
+                    b.right = flat(b.left.take(), right);
                 }
-
-                dfs(tree.left.clone(), curr_path, paths, target_sum - tree.val);
-                dfs(tree.right.clone(), curr_path, paths, target_sum - tree.val);
-
-                curr_path.pop();
             }
+            node
         }
 
-        dfs(root, &mut Vec::new(), &mut paths, target_sum);
-
-        paths
+        *root = flat(root.take(), None);
     }
 }
 
