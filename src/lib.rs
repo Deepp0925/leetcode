@@ -23,20 +23,32 @@ use std::cell::RefCell;
 use std::rc::Rc;
 type OptNode = Option<Rc<RefCell<TreeNode>>>;
 impl Solution {
-    pub fn flatten(root: &mut Option<Rc<RefCell<TreeNode>>>) {
-        fn flat(node: OptNode, after: OptNode) -> OptNode {
-            match &node {
-                None => return after,
-                Some(n) => {
-                    let mut b = n.borrow_mut();
-                    let right = flat(b.right.take(), after);
-                    b.right = flat(b.left.take(), right);
-                }
+    pub fn sum_numbers(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
+        let mut v = vec![];
+        fn dfs(node: Option<Rc<RefCell<TreeNode>>>, curr_str: &mut String, v: &mut Vec<String>) {
+            if node.is_none() {
+                return;
             }
-            node
+
+            let node = node.as_ref().unwrap().borrow();
+
+            if node.left.is_none() && node.right.is_none() {
+                let mut c = curr_str.clone();
+                c.push_str(&node.val.to_string());
+                v.push(c);
+                return;
+            }
+
+            curr_str.push_str(&node.val.to_string());
+            dfs(node.left.clone(), curr_str, v);
+            dfs(node.right.clone(), curr_str, v);
+            curr_str.pop();
         }
 
-        *root = flat(root.take(), None);
+        dfs(root, &mut String::new(), &mut v);
+
+        v.into_iter()
+            .fold(0, |acc, e| acc + e.parse::<i32>().unwrap())
     }
 }
 
