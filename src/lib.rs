@@ -32,9 +32,9 @@ impl Solution {
             }
 
             let node = node.as_ref().unwrap().borrow();
-            v.push(node.val);
             dfs(node.left.clone(), v);
             dfs(node.right.clone(), v);
+            v.push(node.val);
         }
 
         dfs(root, &mut v);
