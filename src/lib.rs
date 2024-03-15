@@ -23,32 +23,23 @@ use std::cell::RefCell;
 use std::rc::Rc;
 type OptNode = Option<Rc<RefCell<TreeNode>>>;
 impl Solution {
-    pub fn sum_numbers(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
+    pub fn preorder_traversal(root: Option<Rc<RefCell<TreeNode>>>) -> Vec<i32> {
         let mut v = vec![];
-        fn dfs(node: Option<Rc<RefCell<TreeNode>>>, curr_str: &mut String, v: &mut Vec<String>) {
+
+        fn dfs(node: Option<Rc<RefCell<TreeNode>>>, v: &mut Vec<i32>) {
             if node.is_none() {
                 return;
             }
 
             let node = node.as_ref().unwrap().borrow();
-
-            if node.left.is_none() && node.right.is_none() {
-                let mut c = curr_str.clone();
-                c.push_str(&node.val.to_string());
-                v.push(c);
-                return;
-            }
-
-            curr_str.push_str(&node.val.to_string());
-            dfs(node.left.clone(), curr_str, v);
-            dfs(node.right.clone(), curr_str, v);
-            curr_str.pop();
+            v.push(node.val);
+            dfs(node.left.clone(), v);
+            dfs(node.right.clone(), v);
         }
 
-        dfs(root, &mut String::new(), &mut v);
+        dfs(root, &mut v);
 
-        v.into_iter()
-            .fold(0, |acc, e| acc + e.parse::<i32>().unwrap())
+        v
     }
 }
 
