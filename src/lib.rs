@@ -24,27 +24,56 @@ use std::cell::RefCell;
 use std::rc::Rc;
 type OptNode = Option<Rc<RefCell<TreeNode>>>;
 impl Solution {
-    pub fn kth_smallest(root: Option<Rc<RefCell<TreeNode>>>, mut k: i32) -> i32 {
-        let mut r = 0;
+    pub fn lowest_common_ancestor(
+        root: Option<Rc<RefCell<TreeNode>>>,
+        p: Option<Rc<RefCell<TreeNode>>>,
+        q: Option<Rc<RefCell<TreeNode>>>,
+    ) -> Option<Rc<RefCell<TreeNode>>> {
+        let mut res = root.clone();
+        // returning format has to
 
-        Self::search(root.clone(), &mut k, &mut r);
-
-        r
-    }
-
-    pub fn search(root: Option<Rc<RefCell<TreeNode>>>, k: &mut i32, r: &mut i32) {
-        if let Some(node) = root {
-            Self::search(node.borrow().left.clone(), k, r);
-
-            if *k == 1 {
-                *r = node.borrow().val;
-                *k -= 1;
+        // p should the smaller than q
+        fn bst(root: OptNode, p: OptNode, q: OptNode, res: &mut OptNode) {
+            if root.is_none() {
                 return;
             }
-            *k -= 1;
+            // check if it is equal to current val
+            let root = root.unwrap();
+            let val = root.borrow().val;
+            let p_val = p.as_ref().unwrap().borrow().val;
+            let q_val = q.as_ref().unwrap().borrow().val;
+            // one of the val matches
+            if val == p_val || val == q_val {
+                *res = Some(root);
+                return;
+            }
 
-            Self::search(node.borrow().right.clone(), k, r);
+            // none of the values match
+            // is p val is less than curr val and q val is greater than val
+            match (val > p_val, val < q_val) {
+                // if so then current node is common
+                (true, true) => {
+                    *res = Some(root);
+                }
+                // both values are in the left sub tree
+                (true, false) => bst(root.borrow().left.clone(), p, q, res),
+                // both values are in the right sub tree
+                (false, true) => bst(root.borrow().right.clone(), p, q, res),
+                // traversing the wrong tree
+                // should almost never happen
+                (false, false) => unreachable!(),
+            }
         }
+
+        let (p, q) = if p.as_ref().unwrap().borrow().val < q.as_ref().unwrap().borrow().val {
+            (p, q)
+        } else {
+            (q, p)
+        };
+
+        bst(root, p, q, &mut res);
+
+        res
     }
 }
 
