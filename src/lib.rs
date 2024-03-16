@@ -20,26 +20,40 @@ impl TreeNode {
 }
 
 use std::cell::RefCell;
+
 use std::rc::Rc;
 type OptNode = Option<Rc<RefCell<TreeNode>>>;
 impl Solution {
-    pub fn preorder_traversal(root: Option<Rc<RefCell<TreeNode>>>) -> Vec<i32> {
-        let mut v = vec![];
+    pub fn right_side_view(root: Option<Rc<RefCell<TreeNode>>>) -> Vec<i32> {
+        use std::collections::VecDeque;
+        let mut queue = VecDeque::new();
+        if root.is_some() {
+            queue.push_back(root);
+        }
+        let mut res = vec![];
+        while !queue.is_empty() {
+            let n = queue.len();
 
-        fn dfs(node: Option<Rc<RefCell<TreeNode>>>, v: &mut Vec<i32>) {
-            if node.is_none() {
-                return;
+            for i in 0..n {
+                let node = queue.pop_front().unwrap().unwrap();
+                let node = node.borrow();
+
+                if node.left.is_some() {
+                    queue.push_back(node.left.clone());
+                }
+
+                if node.right.is_some() {
+                    queue.push_back(node.right.clone());
+                }
+
+                // is the last item
+                if i == n - 1 {
+                    res.push(node.val);
+                }
             }
-
-            let node = node.as_ref().unwrap().borrow();
-            dfs(node.left.clone(), v);
-            dfs(node.right.clone(), v);
-            v.push(node.val);
         }
 
-        dfs(root, &mut v);
-
-        v
+        res
     }
 }
 
