@@ -24,18 +24,27 @@ use std::cell::RefCell;
 use std::rc::Rc;
 type OptNode = Option<Rc<RefCell<TreeNode>>>;
 impl Solution {
-    pub fn invert_tree(root: Option<Rc<RefCell<TreeNode>>>) -> Option<Rc<RefCell<TreeNode>>> {
-        let root = root?;
-        {
-            // switch left and right
-            let mut b = root.borrow_mut();
-            let l = b.left.take();
-            let r = b.right.take();
-            b.left = Self::invert_tree(r);
-            b.right = Self::invert_tree(l);
-        }
+    pub fn kth_smallest(root: Option<Rc<RefCell<TreeNode>>>, mut k: i32) -> i32 {
+        let mut r = 0;
 
-        Some(root)
+        Self::search(root.clone(), &mut k, &mut r);
+
+        r
+    }
+
+    pub fn search(root: Option<Rc<RefCell<TreeNode>>>, k: &mut i32, r: &mut i32) {
+        if let Some(node) = root {
+            Self::search(node.borrow().left.clone(), k, r);
+
+            if *k == 1 {
+                *r = node.borrow().val;
+                *k -= 1;
+                return;
+            }
+            *k -= 1;
+
+            Self::search(node.borrow().right.clone(), k, r);
+        }
     }
 }
 
