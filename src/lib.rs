@@ -24,36 +24,18 @@ use std::cell::RefCell;
 use std::rc::Rc;
 type OptNode = Option<Rc<RefCell<TreeNode>>>;
 impl Solution {
-    pub fn right_side_view(root: Option<Rc<RefCell<TreeNode>>>) -> Vec<i32> {
-        use std::collections::VecDeque;
-        let mut queue = VecDeque::new();
-        if root.is_some() {
-            queue.push_back(root);
-        }
-        let mut res = vec![];
-        while !queue.is_empty() {
-            let n = queue.len();
-
-            for i in 0..n {
-                let node = queue.pop_front().unwrap().unwrap();
-                let node = node.borrow();
-
-                if node.left.is_some() {
-                    queue.push_back(node.left.clone());
-                }
-
-                if node.right.is_some() {
-                    queue.push_back(node.right.clone());
-                }
-
-                // is the last item
-                if i == n - 1 {
-                    res.push(node.val);
-                }
-            }
+    pub fn invert_tree(root: Option<Rc<RefCell<TreeNode>>>) -> Option<Rc<RefCell<TreeNode>>> {
+        let root = root?;
+        {
+            // switch left and right
+            let mut b = root.borrow_mut();
+            let l = b.left.take();
+            let r = b.right.take();
+            b.left = Self::invert_tree(r);
+            b.right = Self::invert_tree(l);
         }
 
-        res
+        Some(root)
     }
 }
 
