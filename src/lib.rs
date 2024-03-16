@@ -24,56 +24,37 @@ use std::cell::RefCell;
 use std::rc::Rc;
 type OptNode = Option<Rc<RefCell<TreeNode>>>;
 impl Solution {
-    pub fn lowest_common_ancestor(
-        root: Option<Rc<RefCell<TreeNode>>>,
-        p: Option<Rc<RefCell<TreeNode>>>,
-        q: Option<Rc<RefCell<TreeNode>>>,
-    ) -> Option<Rc<RefCell<TreeNode>>> {
-        let mut res = root.clone();
-        // returning format has to
-
-        // p should the smaller than q
-        fn bst(root: OptNode, p: OptNode, q: OptNode, res: &mut OptNode) {
-            if root.is_none() {
-                return;
-            }
-            // check if it is equal to current val
-            let root = root.unwrap();
-            let val = root.borrow().val;
-            let p_val = p.as_ref().unwrap().borrow().val;
-            let q_val = q.as_ref().unwrap().borrow().val;
-            // one of the val matches
-            if val == p_val || val == q_val {
-                *res = Some(root);
-                return;
-            }
-
-            // none of the values match
-            // is p val is less than curr val and q val is greater than val
-            match (val > p_val, val < q_val) {
-                // if so then current node is common
-                (true, true) => {
-                    *res = Some(root);
-                }
-                // both values are in the left sub tree
-                (true, false) => bst(root.borrow().left.clone(), p, q, res),
-                // both values are in the right sub tree
-                (false, true) => bst(root.borrow().right.clone(), p, q, res),
-                // traversing the wrong tree
-                // should almost never happen
-                (false, false) => unreachable!(),
-            }
+    pub fn level_order(root: Option<Rc<RefCell<TreeNode>>>) -> Vec<Vec<i32>> {
+        use std::collections::VecDeque;
+        let mut v = vec![];
+        let mut queue = VecDeque::new();
+        if let Some(root) = root {
+            queue.push_back(root);
         }
 
-        let (p, q) = if p.as_ref().unwrap().borrow().val < q.as_ref().unwrap().borrow().val {
-            (p, q)
-        } else {
-            (q, p)
-        };
+        while !queue.is_empty() {
+            let n = queue.len();
+            let mut temp = Vec::with_capacity(n);
 
-        bst(root, p, q, &mut res);
+            for _ in 0..n {
+                let node = queue.pop_front().unwrap();
+                let node = node.borrow();
 
-        res
+                temp.push(node.val);
+
+                if let Some(left) = &node.left {
+                    queue.push_back(left.clone());
+                }
+
+                if let Some(right) = &node.right {
+                    queue.push_back(right.clone());
+                }
+            }
+
+            v.push(temp);
+        }
+
+        v
     }
 }
 
