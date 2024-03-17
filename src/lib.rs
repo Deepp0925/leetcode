@@ -53,7 +53,7 @@ impl Solution {
 
             v.push(temp);
         }
-
+        v.reverse();
         v
     }
 }
